@@ -27,6 +27,10 @@ const styles = StyleSheet.create({
       alignSelf: 'flex-end',
       right: 50,
       width: "30%",
+      shadowColor: 'orange-light',
+      shadowOffset: { width: 2, height: 3 },
+      shadowOpacity: 0.5,
+      shadowRadius: 2,
     },
     buttonText: {
       color: 'white',
