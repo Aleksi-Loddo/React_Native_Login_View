@@ -1,6 +1,7 @@
-import { TextInput, View, StyleSheet, Text  } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
-import { Entypo } from "@expo/vector-icons";
+import React, { useState, useEffect } from "react";
+import { TextInput, View, StyleSheet, Text, Animated } from "react-native";
+import { AntDesign, Entypo  } from "@expo/vector-icons";
+
 
  
     interface TextInputFieldProps {
@@ -16,6 +17,18 @@ import { Entypo } from "@expo/vector-icons";
 
 export  default function TextInputField({ input, showForgot }: TextInputFieldProps)  {
     
+    const [isFocused, setIsFocused] = useState(false);
+    const [value, setValue] = useState('');
+    const animatedIsFocused = new Animated.Value(value === '' ? 0 : 1);
+
+    useEffect(() => {
+        Animated.timing(animatedIsFocused, {
+          toValue: isFocused || value !== '' ? 1 : 0,
+          duration: 200,
+          useNativeDriver: false,
+        }).start();
+      }, [isFocused, value]);
+
     function IconDisplay(input: String) {
         if (input === "Email") {
              return  <AntDesign name="mail" size={24} color="black" style={styles.icons}/>
@@ -26,25 +39,70 @@ export  default function TextInputField({ input, showForgot }: TextInputFieldPro
         }
     }
 
+    const labelStyle = {
+       
+        top: animatedIsFocused.interpolate({
+          inputRange: [0, 1],
+          outputRange: [18, -10],
+        }),
+        fontSize: animatedIsFocused.interpolate({
+          inputRange: [0, 1],
+          outputRange: [16, 12],
+        }),
+        color: animatedIsFocused.interpolate({
+          inputRange: [0, 1],
+          outputRange: ['grey', 'black'],
+        }),
+      };
+
+
     return (
-        <View style={styles.Container}>
+        <View style={styles.outercontainer}>
          {IconDisplay(input) }
-            <TextInput
+       
+        <View style={styles.Container}>
+           <Animated.Text style={styles.Animatedlabel && [labelStyle]}>
+            {isFocused === false ? '' : input }
+        </Animated.Text> 
+         <TextInput
                 style={styles.TextInput}
-                placeholder= { input } 
-                placeholderTextColor= 'grey'
-            />  
-            {input === "Password" && showForgot &&(
-             <Text style={styles.forgottext} onPress={handleForgotPassword}> 
-             Forgot 
-             </Text >    
-            )}
-            
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
+                onChangeText={(text) => setValue(text)}
+                value={value}
+                placeholderTextColor="black"
+                placeholder={isFocused ? '' : input}/>
+                
+                {input === "Password" && showForgot &&(
+                   <Text style={styles.forgottext} onPress={handleForgotPassword}> 
+                   Forgot 
+                   </Text >    
+                )}
+           </View> 
         </View>          
     )
 }
 
+
+
+
+
+
+
+
+
+
  const styles = StyleSheet.create({
+    outercontainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        margin: 12,
+        borderWidth: 0,
+        borderRadius: 10,
+        width: '90%',
+    //  position: 'relative',
+        paddingLeft: "4%", //padding for left and right
+    },
     Container: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -52,13 +110,13 @@ export  default function TextInputField({ input, showForgot }: TextInputFieldPro
         borderWidth: 1,
         borderRadius: 10,
         width: '80%',
-       // position: 'relative',
-       paddingHorizontal: 10, //padding for left and right
+    //  position: 'relative',
+        paddingRight: 5, //padding for left and right
     },
     TextInput: {
         flex: 1,
         height: 40,
-        paddingLeft: 40,
+        paddingLeft: 0,
         color: 'black',
     },
     icons: {
@@ -71,8 +129,12 @@ export  default function TextInputField({ input, showForgot }: TextInputFieldPro
         right: 10,
         color: 'orange',
         fontWeight: 'bold',
-        left: 2,
-        
-    }   
+        left: 2,    
+    },
+    Animatedlabel: {
+        left: 80,
+        top: 25,
+        position: 'absolute',
+    }
 
  })
