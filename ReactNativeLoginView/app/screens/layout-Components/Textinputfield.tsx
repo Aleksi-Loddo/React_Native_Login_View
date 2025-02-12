@@ -31,7 +31,8 @@ export  default function TextInputField({ input, showForgot }: TextInputFieldPro
          {IconDisplay(input) }
             <TextInput
                 style={styles.TextInput}
-                placeholder= {"Type your" + input } 
+                placeholder= { input } 
+                placeholderTextColor= 'grey'
             />  
             {input === "Password" && showForgot &&(
              <Text style={styles.forgottext} onPress={handleForgotPassword}> 
