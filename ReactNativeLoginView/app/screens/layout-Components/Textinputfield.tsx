@@ -40,7 +40,7 @@ export  default function TextInputField({ input, showForgot }: TextInputFieldPro
     }
 
     const labelStyle = {
-       
+      position: 'absolute' as 'absolute',
         top: animatedIsFocused.interpolate({
           inputRange: [0, 1],
           outputRange: [18, -10],
