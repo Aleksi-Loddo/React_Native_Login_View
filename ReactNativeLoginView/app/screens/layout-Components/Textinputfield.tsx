@@ -43,11 +43,11 @@ export  default function TextInputField({ input, showForgot }: TextInputFieldPro
       position: 'absolute' as 'absolute',
         top: animatedIsFocused.interpolate({
           inputRange: [0, 1],
-          outputRange: [18, -10],
+          outputRange: [18, 2],
         }),
         fontSize: animatedIsFocused.interpolate({
           inputRange: [0, 1],
-          outputRange: [16, 12],
+          outputRange: [16, 10],
         }),
         color: animatedIsFocused.interpolate({
           inputRange: [0, 1],
